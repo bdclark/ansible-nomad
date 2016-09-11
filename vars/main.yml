@@ -1,0 +1,9 @@
+---
+nomad_base_config:
+  data_dir: "{{ nomad_data_dir }}"
+nomad_server_base_config:
+  server:
+    enabled: "{{ nomad_server_enabled }}"
+nomad_client_base_config:
+  client:
+    enabled: "{{ not nomad_server_enabled }}"

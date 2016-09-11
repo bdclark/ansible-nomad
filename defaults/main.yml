@@ -1,0 +1,47 @@
+---
+nomad_version: 0.4.1
+nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
+nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
+nomad_zip_checksum: "{{ nomad_checksums[nomad_zip] }}"
+nomad_zip_dir: /tmp  # path to download nomad zip file before extraction
+nomad_install_only: false
+
+nomad_bin_dir: /usr/local/bin     # dir to extract nomad binary
+nomad_conf_dir: /etc/nomad        # dir for nomad config files
+nomad_data_dir: /var/lib/nomad    # nomad data dir
+nomad_log_dir: /var/log/nomad     # log dir - only used with sysvinit
+
+# init method; can be upstart, systemd, sysvinit, or null to auto-detect
+nomad_init_method: ~
+# if true will create nomad user/group
+nomad_user_managed: true
+nomad_user: nomad
+nomad_group: nomad
+
+# whether service is enabled/started or disabled/stopped
+nomad_service_enabled: true
+# whether to restart service on config file or service changes
+nomad_service_restart_on_update: true
+
+# config settings passed to nomad.json conf file: https://www.nomadproject.io/docs/agent/config.html
+nomad_general_config: {}
+nomad_server_enabled: false
+nomad_server_config: {}
+nomad_client_config: {}
+nomad_consul_config: {}
+nomad_atlas_config: {}
+
+# templates used in this role
+nomad_upstart_template: nomad.conf.j2
+nomad_systemd_template: nomad.service.j2
+nomad_sysvinit_template: nomad.sysvinit.j2
+
+nomad_checksums:
+  nomad_0.2.0_linux_amd64.zip: sha256:f4525cbd99fd57ef607f9556be4f4bc39f82391947f40cc993538bba7da5bf90
+  nomad_0.2.1_linux_amd64.zip: sha256:a47881efc148cc37a8c94fb120c1d198371b9124e92668e8fc0badddef99cc2a
+  nomad_0.2.3_linux_amd64.zip: sha256:0f3a7083d160893a291b5f8b4359683c2df7991fa0a3e969f8785ddb40332a8c
+  nomad_0.3.0_linux_amd64.zip: sha256:530e5177cecd65d36102953099db19ecdbfa62b3acf20a0c48e20753a597f28e
+  nomad_0.3.1_linux_amd64.zip: sha256:467fcebe9f0a349063a4f16c97cb71d9c57451fc1f10cdb2292761cf56542671
+  nomad_0.3.2_linux_amd64.zip: sha256:710ff3515bc449bc2a06652464f4af55f1b76f63c77a9048bc30d6fde284b441
+  nomad_0.4.0_linux_amd64.zip: sha256:c0479dcc03d35c1b0f6e7be256732431384bec16901a124dd97b2a60d465fb91
+  nomad_0.4.1_linux_amd64.zip: sha256:0cdb5dd95c918c6237dddeafe2e9d2049558fea79ed43eacdfcd247d5b093d67

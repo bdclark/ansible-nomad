@@ -1,0 +1,26 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: ansible_playbook
+  # roles_path: ../nomad/
+  require_chef_for_busser: false
+  require_ruby_for_busser: true
+  hosts: test-kitchen
+  ansible_verbose: true
+  ansible_verbosity: 1
+  ansible_diff: true
+  ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
+  # idempotency_test: true
+
+verifier:
+  ruby_bindir: '/usr/bin'
+
+platforms:
+- name: ubuntu-14.04
+- name: ubuntu-16.04
+- name: centos-6.7
+
+suites:
+- name: default

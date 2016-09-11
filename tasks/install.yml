@@ -1,0 +1,38 @@
+---
+- name: update apt
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_os_family == 'Debian'
+
+- name: install unzip
+  package:
+    name: unzip
+    state: present
+
+- name: download nomad zip
+  get_url:
+    url: "{{ nomad_zip_url }}"
+    dest: "{{ nomad_zip_dir }}/{{ nomad_zip }}"
+    checksum: "{{ nomad_zip_checksum }}"
+
+- name: create nomad binary directory
+  file:
+    state: directory
+    path: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}"
+    owner: root
+    group: root
+    recurse: yes
+
+- name: extract nomad zip
+  unarchive:
+    src: "{{ nomad_zip_dir }}/{{ nomad_zip }}"
+    dest: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}"
+    copy: no
+    creates: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}/nomad"
+
+- name: symlink nomad binary
+  file:
+    state: link
+    src: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}/nomad"
+    dest: "{{ nomad_bin_dir }}/nomad"

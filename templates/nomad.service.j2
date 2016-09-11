@@ -1,0 +1,17 @@
+[Unit]
+Description=Nomad
+Documentation=https://nomadproject.io/docs/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Environment=GOMAXPROCS={{ ansible_processor_vcpus }}
+User={{ nomad_user }}
+Group={{ nomad_group }}
+ExecStart={{ nomad_bin_dir }}/nomad agent -config {{ nomad_conf_dir }}
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+.vagrant
+*.py[co]
+build
+
+# OS and editor
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.idea
+*.sublime*
+
+# Bundler
+Gemfile.lock
+bin/*
+.bundle/*
+
+# Test kitchen
+.kitchen/*
+.kitchen.local.yml
+.kitchen.list.yml

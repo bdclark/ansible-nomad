@@ -1,0 +1,121 @@
+---
+- name: set general configuration
+  set_fact:
+    nomad_config: "{{ nomad_base_config | combine(nomad_general_config, recursive=True) }}"
+
+- name: set server configuration
+  set_fact:
+    nomad_config: "{{ nomad_config | combine(nomad_server_base_config, {'server': nomad_server_config}, recursive=True) }}"
+  when: nomad_server_enabled or
+        (nomad_server_config.enabled is defined and nomad_server_config.enabled | bool)
+
+- name: set client configuration
+  set_fact:
+    nomad_config: "{{ nomad_config | combine(nomad_client_base_config, {'client': nomad_client_config}, recursive=True) }}"
+  when: not nomad_server_enabled or
+        (nomad_client_config.enabled is defined and nomad_client_config.enabled | bool)
+
+- name: set consul configuration
+  set_fact:
+    nomad_config: "{{ nomad_config | combine({'consul': nomad_consul_config}, recursive=True) }}"
+  when: nomad_consul_config
+
+- name: set atlas configuration
+  set_fact:
+    nomad_config: "{{ nomad_config | combine({'atlas': nomad_atlas_config}, recursive=True) }}"
+  when: nomad_atlas_config
+
+- name: create service group
+  group:
+    name: "{{ nomad_group }}"
+    system: yes
+  when: nomad_user_managed
+
+- name: create service user
+  user:
+    name: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    createhome: no
+    system: yes
+    shell: /bin/false
+    comment: Nomad service user
+  when: nomad_user_managed
+
+- name: create conf directory
+  file:
+    state: directory
+    path: "{{ nomad_conf_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create data directory
+  file:
+    state: directory
+    path: "{{ nomad_data_dir }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0755
+    recurse: yes
+
+- name: write config file
+  copy:
+    content: "{{ nomad_config | to_nice_json }}"
+    dest: "{{ nomad_conf_dir }}/nomad.json"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+  notify:
+    - restart nomad
+
+- name: upstart init script
+  template:
+    src: "{{ nomad_upstart_template }}"
+    dest: /etc/init/nomad.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: nomad_init_method == 'upstart' or (nomad_init_method is none and ansible_os_family == 'Debian' and ansible_service_mgr == 'upstart')
+  register: nomad_init_upstart
+  notify:
+    - restart nomad
+
+- name: systemd init script
+  template:
+    src: "{{ nomad_systemd_template }}"
+    dest: /etc/systemd/system/nomad.service
+    owner: root
+    group: root
+    mode: 0755
+  when: nomad_init_method == 'systemd' or (nomad_init_method is none and ansible_service_mgr == 'systemd')
+  register: nomad_init_systemd
+  notify:
+    - reload systemd
+    - restart nomad
+
+- name: sysv init script
+  template:
+    src: "{{ nomad_sysvinit_template }}"
+    dest: /etc/init.d/nomad
+    owner: root
+    group: root
+    mode: 0755
+  when: nomad_init_method == 'sysvinit' or (nomad_init_upstart|skipped and nomad_init_systemd|skipped)
+  register: nomad_init_sysvinit
+  notify:
+    - restart nomad
+
+- name: create log directory
+  file:
+    state: directory
+    path: "{{ nomad_log_dir }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0755
+    recurse: yes
+  when: not nomad_init_sysvinit|skipped
+
+- name: manage nomad service
+  service:
+    name: nomad
+    state: "{{ nomad_service_enabled | ternary('started', 'stopped') }}"
+    enabled: "{{ nomad_service_enabled }}"

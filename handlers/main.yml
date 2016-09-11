@@ -1,0 +1,9 @@
+---
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: restart nomad
+  service:
+    name: nomad
+    state: restarted
+  when: nomad_service_enabled and nomad_service_restart_on_update

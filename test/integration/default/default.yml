@@ -1,0 +1,10 @@
+---
+- hosts: test-kitchen
+  remote_user: root
+
+  vars:
+    nomad_server_enabled: true
+    nomad_server_config:
+      bootstrap_expect: 1
+  roles:
+    - role: nomad
