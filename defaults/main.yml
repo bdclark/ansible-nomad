@@ -1,5 +1,5 @@
 ---
-nomad_version: 0.4.1
+nomad_version: 0.5.1
 
 nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
 nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
