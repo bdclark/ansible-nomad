@@ -71,9 +71,11 @@
     dest: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}"
     copy: no
     creates: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}/nomad"
+  notify: restart nomad
 
 - name: symlink nomad binary
   file:
     state: link
     src: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}/nomad"
     dest: "{{ nomad_bin_dir }}/nomad"
+  notify: restart nomad
