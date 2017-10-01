@@ -3,19 +3,14 @@ driver:
   name: vagrant
 
 provisioner:
-  name: ansible_playbook
-  # roles_path: ../nomad/
-  require_chef_for_busser: false
-  require_ruby_for_busser: true
-  hosts: test-kitchen
-  ansible_verbose: true
-  ansible_verbosity: 1
-  ansible_diff: true
-  ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
-  # idempotency_test: true
+  name: ansible_push
+  ansible_config: test/ansible.cfg
+  verbose: v
+  diff: true
+  chef_bootstrap_url: nil
 
 verifier:
-  ruby_bindir: '/usr/bin'
+  name: inspec
 
 platforms:
 - name: ubuntu-14.04
@@ -24,3 +19,5 @@ platforms:
 
 suites:
 - name: default
+  provisioner:
+    playbook: test/playbooks/default.yml

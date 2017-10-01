@@ -1,6 +1,6 @@
 ---
-- hosts: test-kitchen
-  remote_user: root
+- hosts: all
+  become: true
 
   vars:
     nomad_server_enabled: true
@@ -8,3 +8,7 @@
       bootstrap_expect: 1
   roles:
     - role: nomad
+  tasks:
+    - package:
+        name: curl
+        state: present

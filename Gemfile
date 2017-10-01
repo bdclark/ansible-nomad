@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
+gem 'kitchen-ansiblepush'
+gem 'kitchen-vagrant'
 gem 'test-kitchen'
-gem 'kitchen-ansible'
-gem 'kitchen-docker'

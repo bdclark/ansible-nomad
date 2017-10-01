@@ -1,6 +1,7 @@
 .vagrant
 *.py[co]
 build
+*.retry
 
 # OS and editor
 .DS_Store
