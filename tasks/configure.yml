@@ -20,11 +20,6 @@
     nomad_config: "{{ nomad_config | combine({'consul': nomad_consul_config}, recursive=True) }}"
   when: nomad_consul_config
 
-- name: set atlas configuration
-  set_fact:
-    nomad_config: "{{ nomad_config | combine({'atlas': nomad_atlas_config}, recursive=True) }}"
-  when: nomad_atlas_config
-
 - name: create service group
   group:
     name: "{{ nomad_group }}"
@@ -45,9 +40,9 @@
   file:
     state: directory
     path: "{{ nomad_conf_dir }}"
-    owner: root
-    group: root
-    mode: 0755
+    owner: "{{ nomad_conf_dir_owner }}"
+    group: "{{ nomad_group }}"
+    mode: "{{ nomad_conf_dir_mode }}"
 
 - name: create data directory
   file:
@@ -55,7 +50,7 @@
     path: "{{ nomad_data_dir }}"
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
-    mode: 0755
+    mode: 0750
     recurse: yes
 
 - name: write config file
@@ -64,6 +59,7 @@
     dest: "{{ nomad_conf_dir }}/nomad.json"
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
+    mode: 0640
   notify:
     - restart nomad
 

@@ -1,5 +1,5 @@
 ---
-nomad_version: 0.5.1
+nomad_version: 0.6.3
 
 nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
 nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
@@ -19,6 +19,9 @@ nomad_conf_dir: /etc/nomad        # dir for nomad config files
 nomad_data_dir: /var/lib/nomad    # nomad data dir
 nomad_log_dir: /var/log/nomad     # log dir - only used with sysvinit
 
+nomad_conf_dir_owner: root        # owner of nomad config dir
+nomad_conf_dir_mode: 0750         # mode of nomad config dir
+
 # init method; can be upstart, systemd, sysvinit, or null to auto-detect
 nomad_init_method: ~
 # if true will create nomad user/group
@@ -37,7 +40,6 @@ nomad_server_enabled: false
 nomad_server_config: {}
 nomad_client_config: {}
 nomad_consul_config: {}
-nomad_atlas_config: {}
 
 # templates used in this role
 nomad_upstart_template: nomad.conf.j2
