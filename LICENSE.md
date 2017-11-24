@@ -1,7 +1,7 @@
 MIT License
 ===========
 
-Copyright © `2016` `Brian Clark` `<brian@clark.zone>`
+Copyright © `2017` `Brian Clark` `<brian@clark.zone>`
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
