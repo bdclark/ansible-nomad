@@ -28,23 +28,23 @@
     owner: root
     group: root
     mode: 0644
-  when: "{{ nomad_verify_checksum_signature }} | bool"
+  when: nomad_verify_checksum_signature | bool
 
 - name: import hashicorp gpg key
   command: gpg --import  "{{ nomad_download_dir }}/hashicorp.asc"
   changed_when: no
-  when: "{{ nomad_verify_checksum_signature }} | bool"
+  when: nomad_verify_checksum_signature | bool
 
 - name: download nomad checksum signature file
   get_url:
     url: "{{ nomad_signature_url }}"
     dest: "{{ nomad_download_dir }}/{{ nomad_signature_file }}"
-  when: "{{ nomad_verify_checksum_signature }} | bool"
+  when: nomad_verify_checksum_signature | bool
 
 - name: verify checksum file
   command: gpg --batch --verify {{ nomad_download_dir }}/{{ nomad_signature_file }} {{ nomad_download_dir }}/{{ nomad_checksum_file }}
   changed_when: no
-  when: "{{ nomad_verify_checksum_signature }} | bool"
+  when: nomad_verify_checksum_signature | bool
 
 - name: get checksum of nomad zip
   command:  grep {{ nomad_zip }} {{ nomad_download_dir }}/{{ nomad_checksum_file }}
