@@ -1,25 +1,4 @@
 ---
-- name: set general configuration
-  set_fact:
-    nomad_config: "{{ nomad_base_config | combine(nomad_general_config, recursive=True) }}"
-
-- name: set server configuration
-  set_fact:
-    nomad_config: "{{ nomad_config | combine(nomad_server_base_config, {'server': nomad_server_config}, recursive=True) }}"
-  when: nomad_server_enabled or
-        (nomad_server_config.enabled is defined and nomad_server_config.enabled | bool)
-
-- name: set client configuration
-  set_fact:
-    nomad_config: "{{ nomad_config | combine(nomad_client_base_config, {'client': nomad_client_config}, recursive=True) }}"
-  when: not nomad_server_enabled or
-        (nomad_client_config.enabled is defined and nomad_client_config.enabled | bool)
-
-- name: set consul configuration
-  set_fact:
-    nomad_config: "{{ nomad_config | combine({'consul': nomad_consul_config}, recursive=True) }}"
-  when: nomad_consul_config
-
 - name: create service group
   group:
     name: "{{ nomad_group }}"
@@ -54,8 +33,8 @@
     recurse: yes
 
 - name: write config file
-  copy:
-    content: "{{ nomad_config | to_nice_json }}"
+  template:
+    src: "{{ nomad_config_template }}"
     dest: "{{ nomad_conf_dir }}/nomad.json"
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"

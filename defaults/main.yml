@@ -1,5 +1,5 @@
 ---
-nomad_version: 0.6.3
+nomad_version: 0.7.0
 
 nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
 nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
@@ -34,14 +34,20 @@ nomad_service_enabled: true
 # whether to restart service on config file or service changes
 nomad_service_restart_on_update: true
 
-# config settings passed to nomad.json conf file: https://www.nomadproject.io/docs/agent/config.html
-nomad_general_config: {}
+# whether to enable nomad server and include server config
 nomad_server_enabled: false
+# whether to enable nomad client and include client config
+nomad_client_enabled: "{{ not nomad_server_enabled }}"
+
+# general config settings (except for server and client stanzas)
+nomad_general_config: {}
+# nomad server config - only inluded if nomad_server_enabled is true
 nomad_server_config: {}
+# nomad client config
 nomad_client_config: {}
-nomad_consul_config: {}
 
 # templates used in this role
 nomad_upstart_template: nomad.conf.j2
 nomad_systemd_template: nomad.service.j2
 nomad_sysvinit_template: nomad.sysvinit.j2
+nomad_config_template: nomad.json.j2

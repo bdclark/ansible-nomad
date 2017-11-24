@@ -1,9 +1,12 @@
 ---
 nomad_base_config:
   data_dir: "{{ nomad_data_dir }}"
-nomad_server_base_config:
-  server:
-    enabled: "{{ nomad_server_enabled }}"
-nomad_client_base_config:
-  client:
-    enabled: "{{ not nomad_server_enabled }}"
+
+nomad_base_client_config: "{{ {'enabled': nomad_client_enabled} | combine(nomad_client_config, recursive=True) }}"
+
+nomad_base_server_config: "{{ {'enabled': nomad_server_enabled} | combine(nomad_server_config, recursive=True) }}"
+
+nomad_final_config: "{{ nomad_base_config |
+  combine({'client': nomad_base_client_config} if nomad_base_client_config.enabled | bool else {}, recursive=True) |
+  combine({'server': nomad_base_server_config} if nomad_base_server_config.enabled | bool else {}, recursive=True) |
+  combine(nomad_general_config, recursive=True) }}"
