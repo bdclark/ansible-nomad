@@ -1,5 +1,5 @@
 ---
-nomad_version: 0.7.0
+nomad_version: 0.7.1
 
 nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
 nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
@@ -11,8 +11,6 @@ nomad_checksum_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{
 nomad_verify_checksum_signature: true
 nomad_signature_file: "{{ nomad_checksum_file }}.sig"
 nomad_signature_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_signature_file }}"
-
-nomad_install_only: false
 
 nomad_bin_dir: /usr/local/bin     # dir to extract nomad binary
 nomad_conf_dir: /etc/nomad        # dir for nomad config files
@@ -29,8 +27,11 @@ nomad_user_managed: true
 nomad_user: nomad
 nomad_group: nomad
 
-# whether service is enabled/started or disabled/stopped
+# whether service is enabled/disabled
 nomad_service_enabled: true
+# whether service is started/stopped
+nomad_service_state: "{{ nomad_service_enabled | ternary('started', 'stopped') }}"
+
 # whether to restart service on config file or service changes
 nomad_service_restart_on_update: true
 
@@ -50,4 +51,4 @@ nomad_client_config: {}
 nomad_upstart_template: nomad.conf.j2
 nomad_systemd_template: nomad.service.j2
 nomad_sysvinit_template: nomad.sysvinit.j2
-nomad_config_template: nomad.json.j2
+nomad_config_template: config.json.j2

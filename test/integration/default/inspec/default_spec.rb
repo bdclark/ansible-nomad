@@ -13,7 +13,7 @@ describe file('/etc/nomad') do
   its('mode') { should cmp '0750' }
 end
 
-describe file('/etc/nomad/nomad.json') do
+describe file('/etc/nomad/config.json') do
   it { should be_file }
   it { should be_owned_by('nomad') }
   it { should be_grouped_into 'nomad' }

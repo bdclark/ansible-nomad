@@ -35,7 +35,7 @@
 - name: write config file
   template:
     src: "{{ nomad_config_template }}"
-    dest: "{{ nomad_conf_dir }}/nomad.json"
+    dest: "{{ nomad_conf_dir }}/config.json"
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
     mode: 0640
@@ -92,5 +92,5 @@
 - name: manage nomad service
   service:
     name: nomad
-    state: "{{ nomad_service_enabled | ternary('started', 'stopped') }}"
+    state: "{{ nomad_service_state }}"
     enabled: "{{ nomad_service_enabled }}"
