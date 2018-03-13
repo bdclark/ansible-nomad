@@ -6,4 +6,4 @@
   service:
     name: nomad
     state: restarted
-  when: nomad_service_enabled and nomad_service_restart_on_update
+  when: nomad_service_enabled and nomad_service_restart_on_update and nomad_service_state == 'started'
