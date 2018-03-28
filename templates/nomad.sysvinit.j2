@@ -33,8 +33,6 @@ confdir="{{ nomad_conf_dir }}"
 # pull in sysconfig settings
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
-export GOMAXPROCS={{ ansible_processor_vcpus }}
-
 start() {
     [ -x $exec ] || exit 5
     [ -d $confdir ] || exit 6
