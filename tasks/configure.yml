@@ -60,7 +60,7 @@
     dest: /etc/systemd/system/nomad.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
   when: nomad_init_method == 'systemd' or (nomad_init_method is none and ansible_service_mgr == 'systemd')
   register: nomad_init_systemd
   notify:
