@@ -9,6 +9,9 @@
   roles:
     - role: nomad
   tasks:
-    - package:
-        name: curl
+    - name: install test dependencies
+      package:
+        name:
+          - curl
+          - net-tools
         state: present

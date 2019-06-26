@@ -40,6 +40,6 @@ describe command('curl --fail -s http://localhost:4646/v1/status/leader') do
   its('exit_status') { should eq 0 }
 end
 
-describe command('nomad version') do
+describe command('/usr/local/bin/nomad version') do
   its('exit_status') { should eq 0 }
 end

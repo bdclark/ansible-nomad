@@ -1,0 +1,35 @@
+---
+language: python
+services: docker
+dist: xenial
+python:
+  - "2.7"
+  - "3.7"
+
+env:
+  global:
+    - ROLE_NAME=nomad
+    - REPO_NAME=ansible-${ROLE_NAME}
+  matrix:
+    - ANSIBLE_VERSION=2.6
+    - ANSIBLE_VERSION=2.7
+    - ANSIBLE_VERSION=2.8
+
+before_install:
+  # project directory must match role name
+  - cd ../
+  - mv $REPO_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+  # tell bundler where to find Gemfile due to directory rename
+  - export BUNDLE_GEMFILE="$(pwd)/Gemfile"
+
+install:
+  - sudo pip install ansible==$ANSIBLE_VERSION ansible-lint yamllint
+  - bundle install
+
+script:
+  - yamllint .
+  - ansible-lint -v . test/integration/default/playbook.yml
+  - ansible --version
+  - bundle exec kitchen list
+  - bundle exec kitchen test

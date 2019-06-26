@@ -2,6 +2,17 @@
 
 Installs and configures HashiCorp [Nomad][1].
 
+Requirements
+------------
+This role is being tested using Ansible 2.6, 2.7, 2.8 on the following operating systems:
+
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Amazon Linux 2
+- Centos 7.x
+
+Other distributions/versions may work, providing it uses systemd.  YMMV.
+
 Role Variables
 --------------
 
