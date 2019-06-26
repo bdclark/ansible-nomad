@@ -1,7 +1,7 @@
 ---
 - name: update apt
   apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
   when: ansible_os_family == 'Debian'
 
@@ -14,7 +14,7 @@
   file:
     state: directory
     path: "{{ nomad_download_dir }}"
-    recurse: yes
+    recurse: true
 
 - name: download nomad checksum file
   get_url:
@@ -32,7 +32,7 @@
 
 - name: import hashicorp gpg key
   command: gpg --import  "{{ nomad_download_dir }}/hashicorp.asc"
-  changed_when: no
+  changed_when: false
   when: nomad_verify_checksum_signature | bool
 
 - name: download nomad checksum signature file
@@ -43,13 +43,13 @@
 
 - name: verify checksum file
   command: gpg --batch --verify {{ nomad_download_dir }}/{{ nomad_signature_file }} {{ nomad_download_dir }}/{{ nomad_checksum_file }}
-  changed_when: no
+  changed_when: false
   when: nomad_verify_checksum_signature | bool
 
 - name: get checksum of nomad zip
-  command:  grep {{ nomad_zip }} {{ nomad_download_dir }}/{{ nomad_checksum_file }}
+  command: grep {{ nomad_zip }} {{ nomad_download_dir }}/{{ nomad_checksum_file }}
   register: nomad_checksum
-  changed_when: no
+  changed_when: false
 
 - name: download nomad zip
   get_url:
@@ -63,13 +63,13 @@
     path: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}"
     owner: root
     group: root
-    recurse: yes
+    recurse: true
 
 - name: extract nomad zip
   unarchive:
     src: "{{ nomad_download_dir }}/{{ nomad_zip }}"
     dest: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}"
-    copy: no
+    copy: false
     creates: "{{ nomad_bin_dir }}/nomad-{{ nomad_version }}/nomad"
   notify: restart nomad
 

@@ -2,18 +2,18 @@
 - name: create service group
   group:
     name: "{{ nomad_group }}"
-    system: yes
-  when: nomad_user_managed
+    system: true
+  when: nomad_user_managed | bool
 
 - name: create service user
   user:
     name: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
-    createhome: no
-    system: yes
+    createhome: false
+    system: true
     shell: /bin/false
     comment: Nomad service user
-  when: nomad_user_managed
+  when: nomad_user_managed | bool
 
 - name: create conf directory
   file:
@@ -30,7 +30,7 @@
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
     mode: 0750
-    recurse: yes
+    recurse: true
 
 - name: write config file
   template:
@@ -42,52 +42,16 @@
   notify:
     - restart nomad
 
-- name: upstart init script
-  template:
-    src: "{{ nomad_upstart_template }}"
-    dest: /etc/init/nomad.conf
-    owner: root
-    group: root
-    mode: 0644
-  when: nomad_init_method == 'upstart' or (nomad_init_method is none and ansible_os_family == 'Debian' and ansible_service_mgr == 'upstart')
-  register: nomad_init_upstart
-  notify:
-    - restart nomad
-
-- name: systemd init script
+- name: systemd unit file
   template:
     src: "{{ nomad_systemd_template }}"
     dest: /etc/systemd/system/nomad.service
     owner: root
     group: root
     mode: 0644
-  when: nomad_init_method == 'systemd' or (nomad_init_method is none and ansible_service_mgr == 'systemd')
-  register: nomad_init_systemd
   notify:
     - reload systemd
     - restart nomad
-
-- name: sysv init script
-  template:
-    src: "{{ nomad_sysvinit_template }}"
-    dest: /etc/init.d/nomad
-    owner: root
-    group: root
-    mode: 0755
-  when: nomad_init_method == 'sysvinit' or (nomad_init_upstart|skipped and nomad_init_systemd|skipped)
-  register: nomad_init_sysvinit
-  notify:
-    - restart nomad
-
-- name: create log directory
-  file:
-    state: directory
-    path: "{{ nomad_log_dir }}"
-    owner: "{{ nomad_user }}"
-    group: "{{ nomad_group }}"
-    mode: 0755
-    recurse: yes
-  when: not nomad_init_sysvinit|skipped
 
 - name: manage nomad service
   service:

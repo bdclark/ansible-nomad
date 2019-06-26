@@ -1,9 +1,0 @@
-description "Nomad"
-
-start on (filesystem and net-device-up IFACE=lo)
-stop on runlevel [!2345]
-
-respawn
-respawn limit 10 5
-setuid {{ nomad_user }}
-exec {{ nomad_bin_dir }}/nomad agent -config {{ nomad_conf_dir }}

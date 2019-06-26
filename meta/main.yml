@@ -1,29 +1,23 @@
+---
 galaxy_info:
   author: Brian Clark
   description: Install and configure Nomad
 
   license: MIT
-  min_ansible_version: 1.8
+  min_ansible_version: 2.6
 
-  # platforms:
-  #   - name: Ubuntu
-  #     versions:
-  #       - all
-  #       - precise
-  #       - trusty
-  #       - xenial
-  #   - name: EL
-  #     versions:
-  #       - all
-  #       - "5"
-  #       - "6"
-  #       - "7"
-  #   - name: Debian
-  #     versions:
-  #       - all
-  #       - wheezy
-  #       - jessie
-  #       - stretch
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+    - name: EL
+      versions:
+        - "7"
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
 
   galaxy_tags: []
 

@@ -1,5 +1,5 @@
 ---
-nomad_version: 0.7.1
+nomad_version: 0.9.3
 
 nomad_zip: nomad_{{ nomad_version }}_linux_amd64.zip
 nomad_zip_url: https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_zip }}
@@ -48,7 +48,5 @@ nomad_server_config: {}
 nomad_client_config: {}
 
 # templates used in this role
-nomad_upstart_template: nomad.conf.j2
 nomad_systemd_template: nomad.service.j2
-nomad_sysvinit_template: nomad.sysvinit.j2
 nomad_config_template: config.json.j2
