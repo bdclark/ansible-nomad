@@ -1,4 +1,5 @@
 # Nomad Ansible Role
+[![Build Status](https://travis-ci.org/bdclark/ansible-nomad.svg?branch=master)](https://travis-ci.org/bdclark/ansible-nomad)
 
 Installs and configures HashiCorp [Nomad][1].
 
