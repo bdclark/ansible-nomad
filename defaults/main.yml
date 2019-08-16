@@ -12,10 +12,14 @@ nomad_verify_checksum_signature: true
 nomad_signature_file: "{{ nomad_checksum_file }}.sig"
 nomad_signature_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/{{ nomad_signature_file }}"
 
-nomad_bin_dir: /usr/local/bin     # dir to extract nomad binary
-nomad_conf_dir: /etc/nomad        # dir for nomad config files
-nomad_data_dir: /var/lib/nomad    # nomad data dir
-nomad_log_dir: /var/log/nomad     # log dir - only used with sysvinit
+# installation directory (recommended to be version-specific)
+nomad_install_dir: /usr/local/nomad/{{ nomad_version }}
+# directory to symlink nomad binary
+nomad_bin_dir: /usr/local/bin
+# directory for nomad config files
+nomad_conf_dir: /etc/nomad
+# nomad data directory
+nomad_data_dir: /var/lib/nomad
 
 nomad_conf_dir_owner: root        # owner of nomad config dir
 nomad_conf_dir_mode: 0750         # mode of nomad config dir
