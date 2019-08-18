@@ -45,6 +45,7 @@
 - name: get checksum of nomad zip
   command: grep {{ nomad_zip }} {{ nomad_install_dir }}/{{ nomad_checksum_file }}
   register: nomad_checksum
+  check_mode: false
   changed_when: false
 
 - name: download nomad zip
