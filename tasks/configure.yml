@@ -30,7 +30,6 @@
     owner: "{{ nomad_user }}"
     group: "{{ nomad_group }}"
     mode: 0750
-    recurse: true
 
 - name: write config file
   template:
